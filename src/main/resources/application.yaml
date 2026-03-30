@@ -1,0 +1,53 @@
+spring:
+  application:
+    name: kafka-consumer-demo
+
+  mail:
+    host: ${MAIL_HOST}
+    port: ${MAIL_PORT}
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
+    test-connection: true
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+          socketFactory:
+            port: ${MAIL_PORT}
+            class: javax.net.ssl.SSLSocketFactory
+
+  # Database Configuration
+  datasource:
+    url: ${CONSUMER_DB_URL}
+    driver-class-name: org.postgresql.Driver
+    username: ${CONSUMER_DB_USERNAME}
+    password: ${CONSUMER_DB_PASSWORD}
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: false
+
+  # Config Kafka-server
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
+
+    # Config Kafka consumer
+    consumer:
+      group-id: group-1
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      auto-offset-reset: earliest
+      properties:
+        spring:
+          json:
+            trusted:
+              packages: "*"
+server:
+  port: 8082
+
